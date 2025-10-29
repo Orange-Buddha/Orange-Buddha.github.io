@@ -9,175 +9,127 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
   <style>
-  /* === VARIABLES === */
-  :root {
-    --accent-color: #4da3ff;
-    --background-light: #ffffff;
-    --background-dark: #1a1a1a;
-    --text-light: #f9f9f9;
-    --text-dark: #222222;
-  }
+    :root {
+      --accent-color: #00adb5;
+      --bg1: #0f2027;
+      --bg2: #203a43;
+      --bg3: #2c5364;
+      --text-light: #fff;
+      --text-dark: #222;
+      --card-bg: rgba(255, 255, 255, 0.15);
+      --blur: 20px;
+    }
 
-  body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: var(--background-light);
-    color: var(--text-dark);
-    transition: background 0.3s ease, color 0.3s ease;
-  }
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3));
+      background-size: 400% 400%;
+      animation: gradientShift 18s ease infinite;
+      transition: background 0.5s, color 0.5s;
+    }
 
-  body.dark {
-    background: var(--background-dark);
-    color: var(--text-light);
-  }
+    body.dark {
+      color: var(--text-light);
+      --bg1: #000000;
+      --bg2: #1a1a1a;
+      --bg3: #333333;
+    }
 
-  /* === SIDEBAR === */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* === MINIMAL ICON-ONLY SIDEBAR === */
+/* Sidebar Base */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px; /* default desktop width */
+  height: 100vh;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  z-index: 10;
+  transition: transform 0.35s ease, box-shadow 0.3s ease;
+}
+
+/* Hide sidebar off-screen by default on mobile */
+@media (max-width: 768px) {
   .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 80px;
-    height: 100%;
-    background: var(--accent-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 1rem;
-    z-index: 1000;
-    transition: all 0.3s ease;
+    transform: translateX(-100%);
+    box-shadow: none;
   }
 
-  .sidebar a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    margin: 1.2rem 0;
-    position: relative;
+  .sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
   }
 
-  .sidebar a:hover::after {
-    content: attr(data-label);
-    position: absolute;
-    left: 60px;
-    background: rgba(0, 0, 0, 0.75);
-    color: white;
-    font-size: 0.9rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
+  /* Ensure the main content doesn’t get covered */
+  body.menu-open main {
+    filter: blur(2px);
+    pointer-events: none;
   }
+}
 
-  /* === HAMBURGER BUTTON === */
-  .hamburger {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 1.8rem;
-    color: white;
-    background: var(--accent-color);
-    padding: 8px 10px;
-    border-radius: 5px;
-    z-index: 1500;
-    cursor: pointer;
-    display: none;
-    border: none;
-  }
+.sidebar:hover {
+  width: 85px;
+}
 
-  /* === MAIN CONTENT === */
-  main {
-    margin-left: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 100vh;
-    padding: 2rem;
-    transition: margin-left 0.3s ease;
-  }
+/* === ICON LINKS === */
+.nav-links {
+  list-style: none;
+  width: 100%;
+  margin-top: 40px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  section {
-    max-width: 900px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 4rem 1rem;
-  }
+.nav-links a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
 
-  /* === THEME TOGGLE ICON === */
-  .theme-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-top: auto;
-    margin-bottom: 1rem;
-  }
+.nav-links a i {
+  font-size: 1.4rem;
+  transition: transform 0.3s, color 0.3s;
+}
 
-  /* === FADE EFFECT === */
-  .theme-fade {
-    animation: fade 0.3s ease;
-  }
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
 
-  @keyframes fade {
-    0% { opacity: 0.5; }
-    100% { opacity: 1; }
-  }
+.nav-links a:hover i {
+  transform: scale(1.25);
+  color: var(--accent-color);
+  text-shadow: 0 0 8px var(--accent-color);
+}
 
-  /* === SECTION REVEAL === */
-  section {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* === MOBILE STYLES === */
-  @media (max-width: 768px) {
-    .sidebar {
-      left: -180px;
-      width: 180px;
-      visibility: hidden;
-    }
-
-    .sidebar.active {
-      left: 0;
-      visibility: visible;
-    }
-
-    main {
-      margin-left: 0;
-      padding: 1.5rem;
-    }
-
-    .hamburger {
-      display: block;
-    }
-
-    section {
-      padding: 80px 20px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    #hero h1 {
-      font-size: 2rem;
-    }
-
-    #hero p {
-      font-size: 1rem;
-    }
-
-    form {
-      width: 90%;
-    }
-  }
-
-align-items: center;
+/* === THEME TOGGLE (MINIMAL) === */
+.theme-toggle {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .theme-toggle a {
@@ -216,10 +168,25 @@ body.fade {
 
 
 
-    main {
-      margin-left: 55px;
-      transition: margin-left 0.4s ease;
-    }
+   main {
+  margin-left: 80px; /* space for sidebar on desktop */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  main {
+    margin-left: 0; /* full width when sidebar hidden */
+    padding: 1.5rem;
+  }
+}
+
     .sidebar:hover + main {
       margin-left: 180px;
     }
@@ -461,187 +428,9 @@ body.menu-open .overlay {
   body.menu-open .hamburger {
     color: var(--accent-color);
   }
-	  
-</style>
-
-</head>
-<body>
-  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
-
-  <aside class="sidebar" id="sidebar">
-  <div>
-
-    <ul class="nav-links">
-      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
-      <li><a href="#about"><i class="fas fa-user"></i></a></li>
-      <li><a href="#projects"><i class="fas fa-folder-open"></i></a></li>
-      <li><a href="#skills"><i class="fas fa-code"></i></a></li>
-      <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
-    </ul>
-  </div>
-
-  <div class="theme-toggle">
-    <a href="#" id="themeToggle">
-      <i class="fas fa-sun theme-icon"></i>
-    </a>
-  </div>
-</aside>
-
-	<div class="overlay"></div>
-
-  <main>
-    <section id="hero">
-      <h1>Hi, I'm Orbitas</h1>
-      <p>Front-End Developer | Designer | Creator</p>
-    </section>
-
-    <section id="about">
-      <h2 class="section-title">About Me</h2>
-      <p>I’m a passionate developer who loves building responsive, interactive web experiences.</p>
-    </section>
-
-    <section id="projects">
-      <h2 class="section-title">Projects</h2>
-      <div class="projects-grid">
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 1" />
-          <div class="info">
-            <h3>Project One</h3>
-            <p>Short description of your project here.</p>
-          </div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 2" />
-          <div class="info">
-            <h3>Project Two</h3>
-            <p>Short description of your project here.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills">
-      <h2 class="section-title">Skills</h2>
-      <div class="skills-list">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span>
-        <span>React</span><span>Node.js</span><span>Python</span>
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2 class="section-title">Contact Me</h2>
-      <form>
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <textarea rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
-      </form>
-    </section>
-
-    <!-- === SOCIAL MEDIA SECTION === -->
-    <section id="socials">
-      <div class="socials">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-dribbble"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-      </div>
-    </section>
-
-    <footer>
-      <p>© 2025 Orbitas. All Rights Reserved.</p>
-    </footer>
-  </main>
-
-  <script>
-    const body = document.body;
-const themeToggle = document.getElementById("themeToggle");
-const icon = document.querySelector(".theme-icon");
-const sidebar = document.getElementById("sidebar");
-const hamburger = document.getElementById("hamburger");
-
-// Load saved theme
-if (localStorage.getItem("theme") === "dark") {
-  body.classList.add("dark");
-  icon.classList.replace("fa-sun", "fa-moon");
-}
-
-// Toggle theme with fade effect
-themeToggle.addEventListener("click", () => {
-  body.classList.add("theme-fade");
-
-  setTimeout(() => {
-    body.classList.toggle("dark");
-    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
-
-    // Swap icon
-    if (body.classList.contains("dark")) {
-      icon.classList.replace("fa-sun", "fa-moon");
-    } else {
-      icon.classList.replace("fa-moon", "fa-sun");
-    }
-
-    body.classList.remove("theme-fade");
-  }, 200);
-});
-
-// Mobile sidebar toggle with overlay + auto-close
-const overlay = document.querySelector(".overlay");
-
-// Toggle sidebar
-hamburger.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-  body.classList.toggle("menu-open");
-});
-
-// Close sidebar when clicking a nav link
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      sidebar.classList.remove("active");
-      body.classList.remove("menu-open");
-    }
-  });
-});
-
-// Close sidebar when clicking the overlay
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("active");
-  body.classList.remove("menu-open");
-});
 
 
-
-
-    // Fade between sections
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        body.classList.add("fade");
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth" });
-          setTimeout(() => body.classList.remove("fade"), 600);
-        }, 300);
-      });
-    });
-
-    // Scroll reveal
-    const sections = document.querySelectorAll("section");
-    const revealOnScroll = () => {
-      const trigger = window.innerHeight * 0.8;
-      sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top < trigger) sec.classList.add("visible");
-      });
-    };
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
-  </script>
-</body>
-</html>
-  
+  </style>
 </head>
 <body>
   <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
