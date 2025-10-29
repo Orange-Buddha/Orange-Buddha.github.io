@@ -1,518 +1,364 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Name | Portfolio</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orbitas | Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
-    :root {
-      --accent-color: #00adb5;
-      --bg1: #0f2027;
-      --bg2: #203a43;
-      --bg3: #2c5364;
-      --text-light: #fff;
-      --text-dark: #222;
-      --card-bg: rgba(255, 255, 255, 0.15);
-      --blur: 20px;
+    /* ---------------------------
+       VARIABLES / THEME (light)
+       --------------------------- */
+    :root{
+      --accent: #00adb5;
+      --bg-page: #f7f8fb;
+      --card-bg: rgba(255,255,255,0.8);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --sidebar-bg: rgba(16,24,32,0.06);
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 22px rgba(16,24,40,0.06);
     }
-
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      color: var(--text-dark);
-      overflow-x: hidden;
-      min-height: 100vh;
-      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3));
-      background-size: 400% 400%;
-      animation: gradientShift 18s ease infinite;
-      transition: background 0.5s, color 0.5s;
-    }
-
     body.dark {
-      color: var(--text-light);
-      --bg1: #000000;
-      --bg2: #1a1a1a;
-      --bg3: #333333;
+      --bg-page: #0f1724;
+      --card-bg: rgba(20,24,28,0.6);
+      --text: #e6eef6;
+      --muted: #94a3b8;
+      --sidebar-bg: rgba(255,255,255,0.04);
+      --glass: rgba(10,14,18,0.6);
+      --shadow: 0 8px 30px rgba(0,0,0,0.6);
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* ---------------------------
+       BASE
+       --------------------------- */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: "Inter", Roboto, system-ui, -apple-system, "Poppins", sans-serif;
+      background: linear-gradient(180deg, var(--bg-page), var(--bg-page));
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height: 100vh;
+      transition: background 0.35s ease, color 0.35s ease;
     }
 
-    /* === MINIMAL ICON-ONLY SIDEBAR === */
-/* Sidebar Base */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 80px; /* default desktop width */
-  height: 100vh;
-  background: var(--sidebar-bg);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  z-index: 10;
-  transition: transform 0.35s ease, box-shadow 0.3s ease;
-}
+    a { color: inherit; }
 
-/* Hide sidebar off-screen by default on mobile */
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    box-shadow: none;
-  }
-
-  .sidebar.active {
-    transform: translateX(0);
-    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
-  }
-
-  /* Ensure the main content doesn’t get covered */
-  body.menu-open main {
-    filter: blur(2px);
-    pointer-events: none;
-  }
-}
-
-.sidebar:hover {
-  width: 85px;
-}
-
-/* === ICON LINKS === */
-.nav-links {
-  list-style: none;
-  width: 100%;
-  margin-top: 40px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.nav-links a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  color: #fff;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.nav-links a i {
-  font-size: 1.4rem;
-  transition: transform 0.3s, color 0.3s;
-}
-
-.nav-links a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-}
-
-.nav-links a:hover i {
-  transform: scale(1.25);
-  color: var(--accent-color);
-  text-shadow: 0 0 8px var(--accent-color);
-}
-
-/* === THEME TOGGLE (MINIMAL) === */
-.theme-toggle {
-  width: 100%;
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.theme-toggle a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.theme-toggle a:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.theme-toggle a i {
-  font-size: 1.4rem;
-  transition: transform 0.3s, color 0.3s;
-}
-
-.theme-toggle a:hover i {
-  color: var(--accent-color);
-  transform: rotate(180deg);
-  text-shadow: 0 0 8px var(--accent-color);
-}
-
-/* === PAGE FADE TRANSITION === */
-body.fade {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-
-
-
-
-   main {
-  margin-left: 80px; /* space for sidebar on desktop */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 100vh;
-  padding: 2rem;
-  transition: margin-left 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  main {
-    margin-left: 0; /* full width when sidebar hidden */
-    padding: 1.5rem;
-  }
-}
-
-    .sidebar:hover + main {
-      margin-left: 180px;
+    /* ---------------------------
+       SIDEBAR (icon-only)
+       --------------------------- */
+    .sidebar{
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 64px;
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 8px;
+      gap: 8px;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      transition: transform 0.35s ease, width 0.25s ease;
     }
+
+    /* slight expand on desktop hover (icons remain centered) */
+    .sidebar:hover {
+      width: 88px;
+    }
+
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+      position: relative;
+    }
+
+    .nav-links a i { font-size: 1.15rem; }
+
+    .nav-links a:hover {
+      transform: translateY(-3px) scale(1.03);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      color: var(--accent);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    /* tooltip on hover (desktop) */
+    .nav-links a::after{
+      content: attr(data-label);
+      position: absolute;
+      left: 100%;
+      margin-left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      padding: 6px 10px;
+      color: var(--text);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      transform-origin: left center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    /* show tooltip only when sidebar expanded (hover) and on wider screens */
+    @media (min-width: 769px){
+      .sidebar:hover .nav-links a::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+    }
+
+    /* theme toggle */
+    .theme-toggle {
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 0;
+    }
+    .theme-btn{
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform 0.18s ease, color 0.18s ease, background 0.18s ease;
+      color: var(--text);
+    }
+    .theme-btn:focus { outline: 2px solid rgba(0,0,0,0.08); outline-offset: 2px; }
+
+    /* ---------------------------
+       HAMBURGER (mobile)
+       --------------------------- */
+    .hamburger{
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 1200;
+      background: var(--accent);
+      color: #08202a;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: none;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    /* ---------------------------
+       OVERLAY (mobile)
+       --------------------------- */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 950;
+    }
+    body.menu-open .overlay { opacity: 1; pointer-events: auto; }
+
+    /* ---------------------------
+       MAIN CONTENT
+       --------------------------- */
+    main{
+      margin-left: 64px;
+      min-height: 100vh;
+      padding: 36px 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 40px;
+      transition: margin-left 0.32s ease;
+    }
+
+    /* HERO / SECTIONS */
+    #hero{
+      width:100%;
+      max-width: 1100px;
+      height: calc(100vh - 72px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      gap:12px;
+    }
+
+    #hero h1{ font-size: 2.8rem; margin:0; }
+    #hero p{ margin:0;color:var(--muted); font-size:1.05rem; }
 
     section {
-      padding: 100px 0;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.7s ease-out;
-    }
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    html { scroll-behavior: smooth; }
-    body.fade {
-      opacity: 0;
-      transition: opacity 0.6s ease-in-out;
-    }
-
-    /* === CONTENT STYLES === */
-    #hero {
-      text-align: center;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      color: #fff;
-      backdrop-filter: blur(10px);
-    }
-    #hero h1 { font-size: 3rem; margin-bottom: 10px; }
-    #hero p { font-size: 1.2rem; color: #ddd; }
-
-    #about, #projects, #skills, #contact {
-      background: var(--card-bg);
+      width:100%;
+      max-width:1000px;
+      padding: 48px;
       border-radius: 12px;
-      margin: 40px auto;
-      padding: 60px;
-      max-width: 1000px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(15px);
-      color: #fff;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    section.visible{ opacity:1; transform:none; }
+
+    .section-title{ margin-top:0; color:var(--accent); font-size:1.4rem; margin-bottom:12px; }
+
+    .projects-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap:18px;
+    }
+    .project-card img{ width:100%; height:150px; object-fit:cover; border-radius:8px 8px 0 0; display:block; }
+    .project-card .info{ padding:12px; }
+
+    .skills-list{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .skills-list span{ background:var(--accent); color:#fff; padding:8px 12px; border-radius:8px; font-weight:600; }
+
+    .socials{ display:flex; gap:18px; justify-content:center; align-items:center; margin-top:6px; }
+    .socials a{ color:var(--text); font-size:1.3rem; transition: transform .18s ease, color .18s ease; }
+    .socials a:hover{ transform:translateY(-4px); color:var(--accent); }
+
+    footer{ color:var(--muted); padding:20px 0; text-align:center; }
+
+    /* ---------------------------
+       THEME & PAGE FADE CLASSES
+       --------------------------- */
+    .theme-fade { opacity: 0.02; transition: opacity 0.25s ease; }
+    .page-fade { opacity: 0.02; transition: opacity 0.25s ease; }
+
+    /* ---------------------------
+       RESPONSIVE
+       --------------------------- */
+    @media (max-width: 1024px){
+      main{ padding:28px 16px; }
+      .sidebar:hover{ width:78px; } /* less aggressive on medium screens */
     }
 
-    h2.section-title {
-      text-align: center;
-      color: var(--accent-color);
-      margin-bottom: 30px;
-      font-size: 1.8rem;
+    @media (max-width: 768px){
+      .hamburger{ display:inline-flex; }
+      .sidebar{ transform: translateX(-110%); transition: transform 0.35s ease; }
+      .sidebar.active{ transform: translateX(0); }
+      main{ margin-left: 0; padding:18px; }
+      /* hide tooltips on small screens */
+      .nav-links a::after { display:none; }
     }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    @media (max-width: 420px){
+      #hero h1{ font-size:1.6rem; }
+      section{ padding: 28px; }
     }
-
-    .project-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
-    .project-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-    .project-card .info {
-      padding: 15px;
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .skills-list span {
-      background: var(--accent-color);
-      color: white;
-      margin: 6px;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 0.9rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      max-width: 500px;
-      margin: auto;
-    }
-    form input, form textarea {
-      margin-bottom: 15px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    form button {
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    form button:hover { background: #008b91; }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #ccc;
-    }
-
-    /* === SOCIAL ICONS === */
-    .socials {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      margin: 50px 0;
-    }
-    .socials a {
-      color: rgba(255,255,255,0.7);
-      font-size: 1.6rem;
-      transition: all 0.3s ease;
-    }
-    .socials a:hover {
-      color: var(--accent-color);
-      transform: translateY(-4px);
-      text-shadow: 0 0 10px var(--accent-color);
-    }
-    body.dark .socials a {
-      color: rgba(255,255,255,0.8);
-    }
-
-     
-
-    /* Overlay behind sidebar (mobile only) */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 9;
-}
-
-/* When menu is open */
-body.menu-open .overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.sidebar {
-	z-index: 10;
-}
-    /* === MOBILE === */
-    .hamburger {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-size: 1.8rem;
-      color: white;
-      background: var(--accent-color);
-      padding: 8px 10px;
-      border-radius: 5px;
-      z-index: 1500;
-      cursor: pointer;
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .sidebar { left: -180px; width: 180px; visibility: hidden; }
-      .sidebar.active { left: 0; visibility: visible; }
-      main { margin-left: 0; }
-      .hamburger { display: block; }
-      section { padding: 80px 20px; }
-    }
-
-    @media (max-width: 480px) {
-      #hero h1 { font-size: 2rem; }
-      #hero p { font-size: 1rem; }
-      form { width: 90%; }
-    }
-
-    @media (max-width: 768px) {
-  /* Disable hover-based sidebar expansion on mobile */
-  .sidebar:hover {
-    width: 180px;
-  }
-
-  /* Prevent desktop margin behavior from triggering */
-  .sidebar:hover + main {
-    margin-left: 0;
-  }
-
-  /* Ensure sidebar slides over content instead of pushing it */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -180px;
-    height: 100%;
-    transition: left 0.4s ease;
-  }
-
-  .sidebar.active {
-    left: 0;
-  }
-
-  main {
-    margin-left: 0;
-    transition: none;
-  }
-
-  /* Optional: dim background when sidebar is open */
-  body.menu-open::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    z-index: 900;
-    opacity: 1;
-    transition: opacity 0.3s;
-  }
-
-  body.menu-open .hamburger {
-    color: var(--accent-color);
-  }
-
-
   </style>
 </head>
 <body>
-  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+  <!-- Hamburger for mobile -->
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
 
-  <aside class="sidebar" id="sidebar">
-  <div>
-
-    <ul class="nav-links">
-      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
-      <li><a href="#about"><i class="fas fa-user"></i></a></li>
-      <li><a href="#projects"><i class="fas fa-folder-open"></i></a></li>
-      <li><a href="#skills"><i class="fas fa-code"></i></a></li>
-      <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar" aria-hidden="false">
+    <ul class="nav-links" role="menu">
+      <li><a href="#hero" data-label="Home" title="Home" role="menuitem"><i class="fas fa-home"></i></a></li>
+      <li><a href="#about" data-label="About Me" title="About Me" role="menuitem"><i class="fas fa-user"></i></a></li>
+      <li><a href="#projects" data-label="Projects" title="Projects" role="menuitem"><i class="fas fa-folder-open"></i></a></li>
+      <li><a href="#skills" data-label="Skills" title="Skills" role="menuitem"><i class="fas fa-code"></i></a></li>
+      <li><a href="#contact" data-label="Contact Me" title="Contact Me" role="menuitem"><i class="fas fa-envelope"></i></a></li>
     </ul>
-  </div>
 
-  <div class="theme-toggle">
-    <a href="#" id="themeToggle">
-      <i class="fas fa-sun theme-icon"></i>
-    </a>
-  </div>
-</aside>
+    <div class="theme-toggle">
+      <button id="themeToggle" class="theme-btn" aria-pressed="false" title="Toggle theme">
+        <i class="fas fa-sun theme-icon" aria-hidden="true"></i>
+      </button>
+    </div>
+  </aside>
 
-	<div class="overlay"></div>
+  <!-- Overlay (mobile) -->
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
 
+  <!-- Main -->
   <main>
-    <section id="hero">
+    <section id="hero" class="visible">
       <h1>Hi, I'm Orbitas</h1>
-      <p>Front-End Developer | Designer | Creator</p>
+      <p>Front-End Developer · Designer · Creator</p>
     </section>
 
     <section id="about">
       <h2 class="section-title">About Me</h2>
-      <p>I’m a passionate developer who loves building responsive, interactive web experiences.</p>
+      <p>I’m a passionate developer who loves building responsive, accessible, and delightful web experiences. I focus on clean, modern UIs and fast interactions.</p>
     </section>
 
     <section id="projects">
       <h2 class="section-title">Projects</h2>
       <div class="projects-grid">
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 1" />
+        <article class="project-card">
+          <img src="https://via.placeholder.com/800x400" alt="Project 1">
           <div class="info">
             <h3>Project One</h3>
             <p>Short description of your project here.</p>
           </div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 2" />
+        </article>
+
+        <article class="project-card">
+          <img src="https://via.placeholder.com/800x400" alt="Project 2">
           <div class="info">
             <h3>Project Two</h3>
             <p>Short description of your project here.</p>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
     <section id="skills">
       <h2 class="section-title">Skills</h2>
       <div class="skills-list">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span>
-        <span>React</span><span>Node.js</span><span>Python</span>
+        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span><span>Node.js</span><span>Python</span>
       </div>
     </section>
 
     <section id="contact">
       <h2 class="section-title">Contact Me</h2>
-      <form>
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <textarea rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
+      <form onsubmit="event.preventDefault(); alert('Thanks — form submission disabled in demo');" style="max-width:640px;margin:0 auto;">
+        <input type="text" placeholder="Your name" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)"/>
+        <input type="email" placeholder="Your email" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)"/>
+        <textarea rows="5" placeholder="Message" required style="width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)"></textarea>
+        <div style="text-align:center"><button type="submit" style="background:var(--accent);color:#072223;border:none;padding:12px 20px;border-radius:10px;cursor:pointer">Send Message</button></div>
       </form>
     </section>
 
-    <!-- === SOCIAL MEDIA SECTION === -->
     <section id="socials">
       <div class="socials">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-dribbble"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
       </div>
     </section>
 
@@ -522,553 +368,139 @@ body.menu-open .overlay {
   </main>
 
   <script>
-    const body = document.body;
-const themeToggle = document.getElementById("themeToggle");
-const icon = document.querySelector(".theme-icon");
-const sidebar = document.getElementById("sidebar");
-const hamburger = document.getElementById("hamburger");
+    (function () {
+      const body = document.body;
+      const sidebar = document.getElementById('sidebar');
+      const hamburger = document.getElementById('hamburger');
+      const overlay = document.getElementById('overlay');
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.querySelector('.theme-icon');
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const sections = document.querySelectorAll('section');
 
-// Load saved theme
-if (localStorage.getItem("theme") === "dark") {
-  body.classList.add("dark");
-  icon.classList.replace("fa-sun", "fa-moon");
-}
+      /* ---------------------------
+         THEME (single icon, saves preference)
+         default: LIGHT modern aesthetic
+         --------------------------- */
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        body.classList.add('dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        themeToggle.setAttribute('aria-pressed','true');
+      }
 
-// Toggle theme with fade effect
-themeToggle.addEventListener("click", () => {
-  body.classList.add("theme-fade");
-
-  setTimeout(() => {
-    body.classList.toggle("dark");
-    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
-
-    // Swap icon
-    if (body.classList.contains("dark")) {
-      icon.classList.replace("fa-sun", "fa-moon");
-    } else {
-      icon.classList.replace("fa-moon", "fa-sun");
-    }
-
-    body.classList.remove("theme-fade");
-  }, 200);
-});
-
-// Mobile sidebar toggle with overlay + auto-close
-const overlay = document.querySelector(".overlay");
-
-// Toggle sidebar
-hamburger.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-  body.classList.toggle("menu-open");
-});
-
-// Close sidebar when clicking a nav link
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      sidebar.classList.remove("active");
-      body.classList.remove("menu-open");
-    }
-  });
-});
-
-// Close sidebar when clicking the overlay
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("active");
-  body.classList.remove("menu-open");
-});
-
-
-
-
-    // Fade between sections
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        body.classList.add("fade");
+      themeToggle.addEventListener('click', () => {
+        // small fade
+        body.classList.add('theme-fade');
         setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth" });
-          setTimeout(() => body.classList.remove("fade"), 600);
-        }, 300);
+          body.classList.toggle('dark');
+          const isDark = body.classList.contains('dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+          // swap icon
+          if (isDark) {
+            themeIcon.classList.replace('fa-sun','fa-moon');
+            themeToggle.setAttribute('aria-pressed','true');
+          } else {
+            themeIcon.classList.replace('fa-moon','fa-sun');
+            themeToggle.setAttribute('aria-pressed','false');
+          }
+          body.classList.remove('theme-fade');
+        }, 180);
       });
-    });
 
-    // Scroll reveal
-    const sections = document.querySelectorAll("section");
-    const revealOnScroll = () => {
-      const trigger = window.innerHeight * 0.8;
-      sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top < trigger) sec.classList.add("visible");
+      /* ---------------------------
+         MOBILE SIDEBAR TOGGLE + OVERLAY
+         --------------------------- */
+      hamburger.addEventListener('click', () => {
+        const open = !sidebar.classList.contains('active');
+        if (open) {
+          sidebar.classList.add('active');
+          body.classList.add('menu-open');
+          overlay.setAttribute('aria-hidden','false');
+        } else {
+          sidebar.classList.remove('active');
+          body.classList.remove('menu-open');
+          overlay.setAttribute('aria-hidden','true');
+        }
       });
-    };
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
-  </script>
-</body>
-</html>
-  align-items: center;
-}
 
-.theme-toggle a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.theme-toggle a:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.theme-toggle a i {
-  font-size: 1.4rem;
-  transition: transform 0.3s, color 0.3s;
-}
-
-.theme-toggle a:hover i {
-  color: var(--accent-color);
-  transform: rotate(180deg);
-  text-shadow: 0 0 8px var(--accent-color);
-}
-
-/* === PAGE FADE TRANSITION === */
-body.fade {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-
-
-
-
-    main {
-      margin-left: 55px;
-      transition: margin-left 0.4s ease;
-    }
-    .sidebar:hover + main {
-      margin-left: 180px;
-    }
-
-    section {
-      padding: 100px 0;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.7s ease-out;
-    }
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    html { scroll-behavior: smooth; }
-    body.fade {
-      opacity: 0;
-      transition: opacity 0.6s ease-in-out;
-    }
-
-    /* === CONTENT STYLES === */
-    #hero {
-      text-align: center;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      color: #fff;
-      backdrop-filter: blur(10px);
-    }
-    #hero h1 { font-size: 3rem; margin-bottom: 10px; }
-    #hero p { font-size: 1.2rem; color: #ddd; }
-
-    #about, #projects, #skills, #contact {
-      background: var(--card-bg);
-      border-radius: 12px;
-      margin: 40px auto;
-      padding: 60px;
-      max-width: 1000px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(15px);
-      color: #fff;
-    }
-
-    h2.section-title {
-      text-align: center;
-      color: var(--accent-color);
-      margin-bottom: 30px;
-      font-size: 1.8rem;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .project-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
-    .project-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-    .project-card .info {
-      padding: 15px;
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .skills-list span {
-      background: var(--accent-color);
-      color: white;
-      margin: 6px;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 0.9rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      max-width: 500px;
-      margin: auto;
-    }
-    form input, form textarea {
-      margin-bottom: 15px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    form button {
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    form button:hover { background: #008b91; }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #ccc;
-    }
-
-    /* === SOCIAL ICONS === */
-    .socials {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      margin: 50px 0;
-    }
-    .socials a {
-      color: rgba(255,255,255,0.7);
-      font-size: 1.6rem;
-      transition: all 0.3s ease;
-    }
-    .socials a:hover {
-      color: var(--accent-color);
-      transform: translateY(-4px);
-      text-shadow: 0 0 10px var(--accent-color);
-    }
-    body.dark .socials a {
-      color: rgba(255,255,255,0.8);
-    }
-
-     
-
-    /* Overlay behind sidebar (mobile only) */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 9;
-}
-
-/* When menu is open */
-body.menu-open .overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.sidebar {
-	z-index: 10;
-
-    /* === MOBILE === */
-    .hamburger {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-size: 1.8rem;
-      color: white;
-      background: var(--accent-color);
-      padding: 8px 10px;
-      border-radius: 5px;
-      z-index: 1500;
-      cursor: pointer;
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .sidebar { left: -180px; width: 180px; visibility: hidden; }
-      .sidebar.active { left: 0; visibility: visible; }
-      main { margin-left: 0; }
-      .hamburger { display: block; }
-      section { padding: 80px 20px; }
-    }
-
-    @media (max-width: 480px) {
-      #hero h1 { font-size: 2rem; }
-      #hero p { font-size: 1rem; }
-      form { width: 90%; }
-    }
-
-    @media (max-width: 768px) {
-  /* Disable hover-based sidebar expansion on mobile */
-  .sidebar:hover {
-    width: 180px;
-  }
-
-  /* Prevent desktop margin behavior from triggering */
-  .sidebar:hover + main {
-    margin-left: 0;
-  }
-
-  /* Ensure sidebar slides over content instead of pushing it */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -180px;
-    height: 100%;
-    transition: left 0.4s ease;
-  }
-
-  .sidebar.active {
-    left: 0;
-  }
-
-  main {
-    margin-left: 0;
-    transition: none;
-  }
-
-  /* Optional: dim background when sidebar is open */
-  body.menu-open::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-    z-index: 900;
-    opacity: 1;
-    transition: opacity 0.3s;
-  }
-
-  body.menu-open .hamburger {
-    color: var(--accent-color);
-  }
-
-
-  </style>
-</head>
-<body>
-  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
-
-  <aside class="sidebar" id="sidebar">
-  <div>
-
-    <ul class="nav-links">
-      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
-      <li><a href="#about"><i class="fas fa-user"></i></a></li>
-      <li><a href="#projects"><i class="fas fa-folder-open"></i></a></li>
-      <li><a href="#skills"><i class="fas fa-code"></i></a></li>
-      <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
-    </ul>
-  </div>
-
-  <div class="theme-toggle">
-    <a href="#" id="themeToggle">
-      <i class="fas fa-sun theme-icon"></i>
-    </a>
-  </div>
-</aside>
-
-	<div class="overlay"></div>
-
-  <main>
-    <section id="hero">
-      <h1>Hi, I'm Orbitas</h1>
-      <p>Front-End Developer | Designer | Creator</p>
-    </section>
-
-    <section id="about">
-      <h2 class="section-title">About Me</h2>
-      <p>I’m a passionate developer who loves building responsive, interactive web experiences.</p>
-    </section>
-
-    <section id="projects">
-      <h2 class="section-title">Projects</h2>
-      <div class="projects-grid">
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 1" />
-          <div class="info">
-            <h3>Project One</h3>
-            <p>Short description of your project here.</p>
-          </div>
-        </div>
-        <div class="project-card">
-          <img src="https://via.placeholder.com/400x200" alt="Project 2" />
-          <div class="info">
-            <h3>Project Two</h3>
-            <p>Short description of your project here.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills">
-      <h2 class="section-title">Skills</h2>
-      <div class="skills-list">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span>
-        <span>React</span><span>Node.js</span><span>Python</span>
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2 class="section-title">Contact Me</h2>
-      <form>
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <textarea rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
-      </form>
-    </section>
-
-    <!-- === SOCIAL MEDIA SECTION === -->
-    <section id="socials">
-      <div class="socials">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-dribbble"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-      </div>
-    </section>
-
-    <footer>
-      <p>© 2025 Orbitas. All Rights Reserved.</p>
-    </footer>
-  </main>
-
-  <script>
-    const body = document.body;
-const themeToggle = document.getElementById("themeToggle");
-const icon = document.querySelector(".theme-icon");
-const sidebar = document.getElementById("sidebar");
-const hamburger = document.getElementById("hamburger");
-
-// Load saved theme
-if (localStorage.getItem("theme") === "dark") {
-  body.classList.add("dark");
-  icon.classList.replace("fa-sun", "fa-moon");
-}
-
-// Toggle theme with fade effect
-themeToggle.addEventListener("click", () => {
-  body.classList.add("theme-fade");
-
-  setTimeout(() => {
-    body.classList.toggle("dark");
-    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
-
-    // Swap icon
-    if (body.classList.contains("dark")) {
-      icon.classList.replace("fa-sun", "fa-moon");
-    } else {
-      icon.classList.replace("fa-moon", "fa-sun");
-    }
-
-    body.classList.remove("theme-fade");
-  }, 200);
-});
-
-// Mobile sidebar toggle with overlay + auto-close
-const overlay = document.querySelector(".overlay");
-
-// Toggle sidebar
-hamburger.addEventListener("click", () => {
-  sidebar.classList.toggle("active");
-  body.classList.toggle("menu-open");
-});
-
-// Close sidebar when clicking a nav link
-document.querySelectorAll(".nav-links a").forEach(link => {
-  link.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      sidebar.classList.remove("active");
-      body.classList.remove("menu-open");
-    }
-  });
-});
-
-// Close sidebar when clicking the overlay
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("active");
-  body.classList.remove("menu-open");
-});
-
-
-
-
-    // Fade between sections
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        body.classList.add("fade");
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth" });
-          setTimeout(() => body.classList.remove("fade"), 600);
-        }, 300);
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        body.classList.remove('menu-open');
+        overlay.setAttribute('aria-hidden','true');
       });
-    });
 
-    // Scroll reveal
-    const sections = document.querySelectorAll("section");
-    const revealOnScroll = () => {
-      const trigger = window.innerHeight * 0.8;
-      sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top < trigger) sec.classList.add("visible");
+      // close sidebar when nav link clicked (mobile)
+      navLinks.forEach(a => {
+        a.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('active');
+            body.classList.remove('menu-open');
+            overlay.setAttribute('aria-hidden','true');
+          }
+        });
       });
-    };
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
+
+      /* ---------------------------
+         NAV LINKS: fade + scroll
+         --------------------------- */
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          // anchor links that point to sections only
+          const href = link.getAttribute('href');
+          if (!href || href.length <= 1) return;
+          const target = document.querySelector(href);
+          if (!target) return;
+
+          e.preventDefault();
+          body.classList.add('page-fade');
+
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => body.classList.remove('page-fade'), 600);
+          }, 200);
+        });
+      });
+
+      /* ---------------------------
+         SCROLL REVEAL
+         --------------------------- */
+      const revealOnScroll = () => {
+        const trigger = window.innerHeight * 0.8;
+        sections.forEach(sec => {
+          const top = sec.getBoundingClientRect().top;
+          if (top < trigger) sec.classList.add('visible');
+        });
+      };
+      window.addEventListener('scroll', revealOnScroll);
+      revealOnScroll(); // initial
+
+      /* ---------------------------
+         Accessibility tweak:
+         close menu on ESC
+         --------------------------- */
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          sidebar.classList.remove('active');
+          body.classList.remove('menu-open');
+          overlay.setAttribute('aria-hidden','true');
+        }
+      });
+
+      /* ---------------------------
+         Resize behavior:
+         ensure menu closed when switching to desktop
+         --------------------------- */
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('active');
+          body.classList.remove('menu-open');
+          overlay.setAttribute('aria-hidden','true');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
