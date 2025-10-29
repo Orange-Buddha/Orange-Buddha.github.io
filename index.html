@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbitas | Portfolio</title>
+  <title>Your Name | Portfolio</title>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
-
   <style>
-    /* === COLOR VARIABLES === */
     :root {
       --accent-color: #00adb5;
       --bg1: #0f2027;
@@ -19,9 +17,9 @@
       --text-light: #fff;
       --text-dark: #222;
       --card-bg: rgba(255, 255, 255, 0.15);
+      --blur: 20px;
     }
 
-    /* === BASE STYLES === */
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
@@ -36,9 +34,9 @@
 
     body.dark {
       color: var(--text-light);
-      --bg1: #000;
+      --bg1: #000000;
       --bg2: #1a1a1a;
-      --bg3: #333;
+      --bg3: #333333;
     }
 
     @keyframes gradientShift {
@@ -47,125 +45,150 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* === SIDEBAR === */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 80px;
-      height: 100vh;
-      background: var(--accent-color);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-      z-index: 1000;
-      transition: transform 0.35s ease;
-    }
+    /* === MINIMAL ICON-ONLY SIDEBAR === */
+/* Sidebar Base */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px; /* default desktop width */
+  height: 100vh;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  z-index: 10;
+  transition: transform 0.35s ease, box-shadow 0.3s ease;
+}
 
-    /* Sidebar links */
-    .nav-links {
-      list-style: none;
-      padding: 0;
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
+/* Hide sidebar off-screen by default on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
 
-    .nav-links a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-      color: #fff;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
+  .sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+  }
 
-    .nav-links a i {
-      font-size: 1.4rem;
-      transition: transform 0.3s, color 0.3s;
-    }
+  /* Ensure the main content doesn’t get covered */
+  body.menu-open main {
+    filter: blur(2px);
+    pointer-events: none;
+  }
+}
 
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-    }
+.sidebar:hover {
+  width: 85px;
+}
 
-    .nav-links a:hover i {
-      transform: scale(1.25);
-      color: var(--text-light);
-      text-shadow: 0 0 8px var(--text-light);
-    }
+/* === ICON LINKS === */
+.nav-links {
+  list-style: none;
+  width: 100%;
+  margin-top: 40px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    /* === THEME TOGGLE === */
-    .theme-toggle {
-      padding: 20px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.nav-links a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
 
-    .theme-toggle a {
-      color: #fff;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      padding: 12px;
-      border-radius: 8px;
-    }
+.nav-links a i {
+  font-size: 1.4rem;
+  transition: transform 0.3s, color 0.3s;
+}
 
-    .theme-toggle a:hover i {
-      color: var(--text-light);
-      transform: rotate(180deg);
-      text-shadow: 0 0 8px var(--text-light);
-    }
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
 
-    /* === HAMBURGER === */
-    .hamburger {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-size: 1.8rem;
-      color: white;
-      background: var(--accent-color);
-      padding: 8px 10px;
-      border-radius: 5px;
-      z-index: 1500;
-      cursor: pointer;
-      display: none;
-      border: none;
-    }
+.nav-links a:hover i {
+  transform: scale(1.25);
+  color: var(--accent-color);
+  text-shadow: 0 0 8px var(--accent-color);
+}
 
-    /* === OVERLAY (MOBILE) === */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 900;
-    }
+/* === THEME TOGGLE (MINIMAL) === */
+.theme-toggle {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    body.menu-open .overlay {
-      opacity: 1;
-      pointer-events: auto;
-    }
+.theme-toggle a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 12px;
+  border-radius: 8px;
+}
 
-    /* === MAIN CONTENT === */
-    main {
-      margin-left: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 100vh;
-      padding: 2rem;
-      transition: margin-left 0.3s ease;
+.theme-toggle a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-toggle a i {
+  font-size: 1.4rem;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.theme-toggle a:hover i {
+  color: var(--accent-color);
+  transform: rotate(180deg);
+  text-shadow: 0 0 8px var(--accent-color);
+}
+
+/* === PAGE FADE TRANSITION === */
+body.fade {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
+
+
+
+   main {
+  margin-left: 80px; /* space for sidebar on desktop */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  main {
+    margin-left: 0; /* full width when sidebar hidden */
+    padding: 1.5rem;
+  }
+}
+
+    .sidebar:hover + main {
+      margin-left: 180px;
     }
 
     section {
@@ -173,41 +196,40 @@
       opacity: 0;
       transform: translateY(40px);
       transition: all 0.7s ease-out;
-      width: 100%;
-      max-width: 1000px;
     }
-
     section.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
+    html { scroll-behavior: smooth; }
+    body.fade {
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    /* === CONTENT STYLES === */
     #hero {
+      text-align: center;
       height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       color: #fff;
+      backdrop-filter: blur(10px);
     }
-
-    #hero h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    #hero p {
-      font-size: 1.2rem;
-      color: #ddd;
-    }
+    #hero h1 { font-size: 3rem; margin-bottom: 10px; }
+    #hero p { font-size: 1.2rem; color: #ddd; }
 
     #about, #projects, #skills, #contact {
       background: var(--card-bg);
       border-radius: 12px;
+      margin: 40px auto;
       padding: 60px;
+      max-width: 1000px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
       backdrop-filter: blur(15px);
       color: #fff;
-      margin: 40px 0;
     }
 
     h2.section-title {
@@ -229,18 +251,15 @@
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
     }
-
     .project-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
-
     .project-card img {
       width: 100%;
       height: 160px;
       object-fit: cover;
     }
-
     .project-card .info {
       padding: 15px;
     }
@@ -250,7 +269,6 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-
     .skills-list span {
       background: var(--accent-color);
       color: white;
@@ -266,10 +284,791 @@
       max-width: 500px;
       margin: auto;
     }
-
     form input, form textarea {
       margin-bottom: 15px;
       padding: 10px;
       border: none;
       border-radius: 5px;
-      bac
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    form button {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover { background: #008b91; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #ccc;
+    }
+
+    /* === SOCIAL ICONS === */
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin: 50px 0;
+    }
+    .socials a {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.6rem;
+      transition: all 0.3s ease;
+    }
+    .socials a:hover {
+      color: var(--accent-color);
+      transform: translateY(-4px);
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+    body.dark .socials a {
+      color: rgba(255,255,255,0.8);
+    }
+
+     
+
+    /* Overlay behind sidebar (mobile only) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9;
+}
+
+/* When menu is open */
+body.menu-open .overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar {
+	z-index: 10;
+}
+    /* === MOBILE === */
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 1.8rem;
+      color: white;
+      background: var(--accent-color);
+      padding: 8px 10px;
+      border-radius: 5px;
+      z-index: 1500;
+      cursor: pointer;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { left: -180px; width: 180px; visibility: hidden; }
+      .sidebar.active { left: 0; visibility: visible; }
+      main { margin-left: 0; }
+      .hamburger { display: block; }
+      section { padding: 80px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      #hero h1 { font-size: 2rem; }
+      #hero p { font-size: 1rem; }
+      form { width: 90%; }
+    }
+
+    @media (max-width: 768px) {
+  /* Disable hover-based sidebar expansion on mobile */
+  .sidebar:hover {
+    width: 180px;
+  }
+
+  /* Prevent desktop margin behavior from triggering */
+  .sidebar:hover + main {
+    margin-left: 0;
+  }
+
+  /* Ensure sidebar slides over content instead of pushing it */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -180px;
+    height: 100%;
+    transition: left 0.4s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  main {
+    margin-left: 0;
+    transition: none;
+  }
+
+  /* Optional: dim background when sidebar is open */
+  body.menu-open::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 900;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+
+  body.menu-open .hamburger {
+    color: var(--accent-color);
+  }
+
+
+  </style>
+</head>
+<body>
+  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+
+  <aside class="sidebar" id="sidebar">
+  <div>
+
+    <ul class="nav-links">
+      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
+      <li><a href="#about"><i class="fas fa-user"></i></a></li>
+      <li><a href="#projects"><i class="fas fa-folder-open"></i></a></li>
+      <li><a href="#skills"><i class="fas fa-code"></i></a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
+    </ul>
+  </div>
+
+  <div class="theme-toggle">
+    <a href="#" id="themeToggle">
+      <i class="fas fa-sun theme-icon"></i>
+    </a>
+  </div>
+</aside>
+
+	<div class="overlay"></div>
+
+  <main>
+    <section id="hero">
+      <h1>Hi, I'm Orbitas</h1>
+      <p>Front-End Developer | Designer | Creator</p>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">About Me</h2>
+      <p>I’m a passionate developer who loves building responsive, interactive web experiences.</p>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <img src="https://via.placeholder.com/400x200" alt="Project 1" />
+          <div class="info">
+            <h3>Project One</h3>
+            <p>Short description of your project here.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="https://via.placeholder.com/400x200" alt="Project 2" />
+          <div class="info">
+            <h3>Project Two</h3>
+            <p>Short description of your project here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-list">
+        <span>HTML</span><span>CSS</span><span>JavaScript</span>
+        <span>React</span><span>Node.js</span><span>Python</span>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Contact Me</h2>
+      <form>
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <!-- === SOCIAL MEDIA SECTION === -->
+    <section id="socials">
+      <div class="socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-dribbble"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 Orbitas. All Rights Reserved.</p>
+    </footer>
+  </main>
+
+  <script>
+    const body = document.body;
+const themeToggle = document.getElementById("themeToggle");
+const icon = document.querySelector(".theme-icon");
+const sidebar = document.getElementById("sidebar");
+const hamburger = document.getElementById("hamburger");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  body.classList.add("dark");
+  icon.classList.replace("fa-sun", "fa-moon");
+}
+
+// Toggle theme with fade effect
+themeToggle.addEventListener("click", () => {
+  body.classList.add("theme-fade");
+
+  setTimeout(() => {
+    body.classList.toggle("dark");
+    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+
+    // Swap icon
+    if (body.classList.contains("dark")) {
+      icon.classList.replace("fa-sun", "fa-moon");
+    } else {
+      icon.classList.replace("fa-moon", "fa-sun");
+    }
+
+    body.classList.remove("theme-fade");
+  }, 200);
+});
+
+// Mobile sidebar toggle with overlay + auto-close
+const overlay = document.querySelector(".overlay");
+
+// Toggle sidebar
+hamburger.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+  body.classList.toggle("menu-open");
+});
+
+// Close sidebar when clicking a nav link
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove("active");
+      body.classList.remove("menu-open");
+    }
+  });
+});
+
+// Close sidebar when clicking the overlay
+overlay.addEventListener("click", () => {
+  sidebar.classList.remove("active");
+  body.classList.remove("menu-open");
+});
+
+
+
+
+    // Fade between sections
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        body.classList.add("fade");
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+          setTimeout(() => body.classList.remove("fade"), 600);
+        }, 300);
+      });
+    });
+
+    // Scroll reveal
+    const sections = document.querySelectorAll("section");
+    const revealOnScroll = () => {
+      const trigger = window.innerHeight * 0.8;
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < trigger) sec.classList.add("visible");
+      });
+    };
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
+  </script>
+</body>
+</html>
+  align-items: center;
+}
+
+.theme-toggle a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.theme-toggle a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-toggle a i {
+  font-size: 1.4rem;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.theme-toggle a:hover i {
+  color: var(--accent-color);
+  transform: rotate(180deg);
+  text-shadow: 0 0 8px var(--accent-color);
+}
+
+/* === PAGE FADE TRANSITION === */
+body.fade {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
+
+
+
+    main {
+      margin-left: 55px;
+      transition: margin-left 0.4s ease;
+    }
+    .sidebar:hover + main {
+      margin-left: 180px;
+    }
+
+    section {
+      padding: 100px 0;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.7s ease-out;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    html { scroll-behavior: smooth; }
+    body.fade {
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    /* === CONTENT STYLES === */
+    #hero {
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+    #hero h1 { font-size: 3rem; margin-bottom: 10px; }
+    #hero p { font-size: 1.2rem; color: #ddd; }
+
+    #about, #projects, #skills, #contact {
+      background: var(--card-bg);
+      border-radius: 12px;
+      margin: 40px auto;
+      padding: 60px;
+      max-width: 1000px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(15px);
+      color: #fff;
+    }
+
+    h2.section-title {
+      text-align: center;
+      color: var(--accent-color);
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    .project-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .project-card .info {
+      padding: 15px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .skills-list span {
+      background: var(--accent-color);
+      color: white;
+      margin: 6px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      margin: auto;
+    }
+    form input, form textarea {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    form button {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover { background: #008b91; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #ccc;
+    }
+
+    /* === SOCIAL ICONS === */
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin: 50px 0;
+    }
+    .socials a {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.6rem;
+      transition: all 0.3s ease;
+    }
+    .socials a:hover {
+      color: var(--accent-color);
+      transform: translateY(-4px);
+      text-shadow: 0 0 10px var(--accent-color);
+    }
+    body.dark .socials a {
+      color: rgba(255,255,255,0.8);
+    }
+
+     
+
+    /* Overlay behind sidebar (mobile only) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9;
+}
+
+/* When menu is open */
+body.menu-open .overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar {
+	z-index: 10;
+
+    /* === MOBILE === */
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 1.8rem;
+      color: white;
+      background: var(--accent-color);
+      padding: 8px 10px;
+      border-radius: 5px;
+      z-index: 1500;
+      cursor: pointer;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { left: -180px; width: 180px; visibility: hidden; }
+      .sidebar.active { left: 0; visibility: visible; }
+      main { margin-left: 0; }
+      .hamburger { display: block; }
+      section { padding: 80px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      #hero h1 { font-size: 2rem; }
+      #hero p { font-size: 1rem; }
+      form { width: 90%; }
+    }
+
+    @media (max-width: 768px) {
+  /* Disable hover-based sidebar expansion on mobile */
+  .sidebar:hover {
+    width: 180px;
+  }
+
+  /* Prevent desktop margin behavior from triggering */
+  .sidebar:hover + main {
+    margin-left: 0;
+  }
+
+  /* Ensure sidebar slides over content instead of pushing it */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -180px;
+    height: 100%;
+    transition: left 0.4s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  main {
+    margin-left: 0;
+    transition: none;
+  }
+
+  /* Optional: dim background when sidebar is open */
+  body.menu-open::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 900;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+
+  body.menu-open .hamburger {
+    color: var(--accent-color);
+  }
+
+
+  </style>
+</head>
+<body>
+  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+
+  <aside class="sidebar" id="sidebar">
+  <div>
+
+    <ul class="nav-links">
+      <li><a href="#hero"><i class="fas fa-home"></i></a></li>
+      <li><a href="#about"><i class="fas fa-user"></i></a></li>
+      <li><a href="#projects"><i class="fas fa-folder-open"></i></a></li>
+      <li><a href="#skills"><i class="fas fa-code"></i></a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
+    </ul>
+  </div>
+
+  <div class="theme-toggle">
+    <a href="#" id="themeToggle">
+      <i class="fas fa-sun theme-icon"></i>
+    </a>
+  </div>
+</aside>
+
+	<div class="overlay"></div>
+
+  <main>
+    <section id="hero">
+      <h1>Hi, I'm Orbitas</h1>
+      <p>Front-End Developer | Designer | Creator</p>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">About Me</h2>
+      <p>I’m a passionate developer who loves building responsive, interactive web experiences.</p>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <img src="https://via.placeholder.com/400x200" alt="Project 1" />
+          <div class="info">
+            <h3>Project One</h3>
+            <p>Short description of your project here.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="https://via.placeholder.com/400x200" alt="Project 2" />
+          <div class="info">
+            <h3>Project Two</h3>
+            <p>Short description of your project here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-list">
+        <span>HTML</span><span>CSS</span><span>JavaScript</span>
+        <span>React</span><span>Node.js</span><span>Python</span>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Contact Me</h2>
+      <form>
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <!-- === SOCIAL MEDIA SECTION === -->
+    <section id="socials">
+      <div class="socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-dribbble"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 Orbitas. All Rights Reserved.</p>
+    </footer>
+  </main>
+
+  <script>
+    const body = document.body;
+const themeToggle = document.getElementById("themeToggle");
+const icon = document.querySelector(".theme-icon");
+const sidebar = document.getElementById("sidebar");
+const hamburger = document.getElementById("hamburger");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  body.classList.add("dark");
+  icon.classList.replace("fa-sun", "fa-moon");
+}
+
+// Toggle theme with fade effect
+themeToggle.addEventListener("click", () => {
+  body.classList.add("theme-fade");
+
+  setTimeout(() => {
+    body.classList.toggle("dark");
+    localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+
+    // Swap icon
+    if (body.classList.contains("dark")) {
+      icon.classList.replace("fa-sun", "fa-moon");
+    } else {
+      icon.classList.replace("fa-moon", "fa-sun");
+    }
+
+    body.classList.remove("theme-fade");
+  }, 200);
+});
+
+// Mobile sidebar toggle with overlay + auto-close
+const overlay = document.querySelector(".overlay");
+
+// Toggle sidebar
+hamburger.addEventListener("click", () => {
+  sidebar.classList.toggle("active");
+  body.classList.toggle("menu-open");
+});
+
+// Close sidebar when clicking a nav link
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+      sidebar.classList.remove("active");
+      body.classList.remove("menu-open");
+    }
+  });
+});
+
+// Close sidebar when clicking the overlay
+overlay.addEventListener("click", () => {
+  sidebar.classList.remove("active");
+  body.classList.remove("menu-open");
+});
+
+
+
+
+    // Fade between sections
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        body.classList.add("fade");
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+          setTimeout(() => body.classList.remove("fade"), 600);
+        }, 300);
+      });
+    });
+
+    // Scroll reveal
+    const sections = document.querySelectorAll("section");
+    const revealOnScroll = () => {
+      const trigger = window.innerHeight * 0.8;
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < trigger) sec.classList.add("visible");
+      });
+    };
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
+  </script>
+</body>
+</html>
